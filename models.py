@@ -26,24 +26,19 @@ class Paintings:
         with open("paintings.json", "w") as f:
             json.dump(self.paintings, f)
 
-    def update(self, id, data):
-        data.pop('csrf_token')
-        self.paintings[id] = data
-        self.save_all()
-
     def delete(self, id):
-        todo = self.get(id)
-        if todo:
-            self.todos.remove(todo)
+        painting = self.get(id)
+        if painting:
+            self.paintings.remove(painting)
             self.save_all()
             return True
         return False
 
     def update(self, id, data):
-        todo = self.get(id)
-        if todo:
-            index = self.todos.index(todo)
-            self.todos[index] = data
+        painting = self.get(id)
+        if painting:
+            index = self.paintings.index(painting)
+            self.paintings[index] = data
             self.save_all()
             return True
         return False

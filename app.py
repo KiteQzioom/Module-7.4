@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, abort, make_response, request
 from models import paintings
+import sys
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nininini"
@@ -17,12 +19,13 @@ def get_todo(painting_id):
 
 @app.route("/api/v1/paintings/", methods=["POST"])
 def create_painting():
-    if not request.json or not 'title' in request.json:
+    if not request.json or not 'name' in request.json:
+        print('This is error output', file=sys.stderr)
         abort(400)
     painting = {
         'id': paintings.all()[-1]['id'] + 1,
         'name': request.json['name'],
-        'year': request.json['description']
+        'year': request.json['year']
     }
     paintings.create(painting)
     return jsonify({'painting': painting}), 201
@@ -48,8 +51,9 @@ def update_painting(painting_id):
     ]):
         abort(400)
     painting = {
+        'id': painting_id,
         'name': data.get('name', painting['name']),
-        'year': data.get('year', painting['year']),
+        'year': data.get('year', painting['year'])
     }
     paintings.update(painting_id, painting)
     return jsonify({'painting': painting})
