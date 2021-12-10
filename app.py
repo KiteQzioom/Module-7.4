@@ -22,10 +22,11 @@ def create_painting():
     if not request.json or not 'name' in request.json:
         print('This is error output', file=sys.stderr)
         abort(400)
+    data = request.json    
     painting = {
         'id': paintings.all()[-1]['id'] + 1,
-        'name': request.json['name'],
-        'year': request.json['year']
+        'name': data.get('name'),
+        'year': data.get('year')
     }
     paintings.create(painting)
     return jsonify({'painting': painting}), 201
